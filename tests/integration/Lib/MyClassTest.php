@@ -1,5 +1,5 @@
 <?php
-namespace Lib\Unit;
+namespace Lib\Integration;
 
 use Lib\MyClass;
 
