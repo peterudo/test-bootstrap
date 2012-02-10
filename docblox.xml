@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<docblox>
+    <parser>
+        <target>build/api</target>
+    </parser>
+    <transformer>
+        <target>build/api</target>
+    </transformer>
+    <transformations>
+        <template name="new_black" />
+    </transformations>
+    <files>
+        <directory>library</directory>
+    </files>
+</docblox>

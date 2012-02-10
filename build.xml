@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="Lib" default="build" basedir=".">
+  <property name="source" value="library/Lib"/>
+  <property name="build" value="${basedir}/build"/>
+
+  <target name="clean" description="Clean up and create artifact directories">
+    <delete dir="${build}"/>
+
+    <mkdir dir="${build}/api"/>
+    <mkdir dir="${build}/code-browser"/>
+    <mkdir dir="${build}/coverage"/>
+    <mkdir dir="${build}/logs"/>
+    <mkdir dir="${build}/pdepend"/>
+  </target>
+
+  <target name="phpunit" description="Run unit tests using PHPUnit and generates junit.xml and clover.xml (config in phpunit.xml)">
+    <exec executable="phpunit" failonerror="true"/>
+  </target>
+
+  <target name="parallelTasks" description="Run the pdepend, phpmd, phpcpd, phpcs, docblox and phploc tasks in parallel using a maximum of 2 threads.">
+    <parallel threadCount="2">
+      <sequential>
+        <antcall target="pdepend"/>
+        <antcall target="phpmd"/>
+      </sequential>
+      <antcall target="phpcpd"/>
+      <antcall target="phpcs"/>
+      <antcall target="docblox"/>
+      <antcall target="phploc"/>
+    </parallel>
+  </target>
+
+  <target name="pdepend" description="Generate jdepend.xml and software metrics charts using PHP_Depend">
+    <exec executable="pdepend">
+      <arg line="--jdepend-xml=${build}/logs/jdepend.xml
+                --jdepend-chart=${build}/pdepend/dependencies.svg
+                --overview-pyramid=${build}/pdepend/overview-pyramid.svg
+                ${source}" />
+    </exec>
+  </target>
+
+  <target name="phpmd" description="Generate pmd.xml using PHPMD">
+    <exec executable="phpmd">
+      <arg line="${source}
+                 xml
+                 phpmd.xml
+                 --reportfile ${build}/logs/pmd.xml" />
+    </exec>
+  </target>
+
+  <target name="phpcpd" description="Generate pmd-cpd.xml using PHPCPD">
+    <exec executable="phpcpd">
+      <arg line="--log-pmd ${build}/logs/pmd-cpd.xml
+                 ${source}" />
+    </exec>
+  </target>
+
+  <target name="phploc" description="Generate phploc.csv">
+    <exec executable="phploc">
+      <arg line="--log-csv ${build}/logs/phploc.csv
+                 ${source}" />
+    </exec>
+  </target>
+
+  <target name="phpcs" description="Generate checkstyle.xml using PHP_CodeSniffer">
+    <exec executable="phpcs" output="/dev/null">
+      <arg line="--report=checkstyle
+                 --report-file=${build}/logs/checkstyle.xml
+                 --standard=PEAR
+                 ${source}" />
+    </exec>
+  </target>
+
+  <target name="docblox" description="Generate API documentation using DocBlox (config in docblox.xml)">
+    <exec executable="docblox" />
+  </target>
+
+  <target name="phpcb" description="Aggregate tool output with PHP_CodeBrowser">
+    <exec executable="phpcb">
+      <arg line="--log ${build}/logs
+                 --source ${source}
+                 --output ${build}/code-browser" />
+    </exec>
+  </target>
+
+  <target name="build" depends="clean,parallelTasks,phpunit,phpcb"/>
+</project>
