@@ -4,10 +4,10 @@
          syntaxCheck="false"
          bootstrap="tests/bootstrap.php">
     <testsuites>
-        <testsuite name="lib-unit">
+        <testsuite name="bootstrap-unit">
             <directory suffix="Test.php">tests/unit/Lib</directory>
         </testsuite>
-        <testsuite name="lib-integration">
+        <testsuite name="bootstrap-integration">
             <directory suffix="Test.php">tests/integration/Lib</directory>
         </testsuite>
     </testsuites>

@@ -3,7 +3,9 @@ namespace Lib\Unit;
 
 use Lib\MyClass;
 
-class MyClassTest extends PHPUnit_Framework_TestCase {
+require_once __DIR__ . '/../../../library/Lib/MyClass.php';
+
+class MyClassTest extends \PHPUnit_Framework_TestCase {
 
     private $myClass;
 
