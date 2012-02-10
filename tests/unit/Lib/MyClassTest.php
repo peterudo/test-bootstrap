@@ -19,7 +19,7 @@ class MyClassTest extends PHPUnit_Framework_TestCase {
         $var = 'content';
         $this->myClass->setVar($var);
 
-        $this->assertSame($var, $this->myClass->getVar())
+        $this->assertSame($var, $this->myClass->getVar());
     }
 
 }
